@@ -1,0 +1,1 @@
+import fs from 'node:fs';import path from 'node:path';const from=path.resolve('node_modules/sql.js/dist/sql-wasm.wasm');const to=path.resolve('public/sql-wasm.wasm');fs.mkdirSync(path.dirname(to),{recursive:true});if(fs.existsSync(from))fs.copyFileSync(from,to);

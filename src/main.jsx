@@ -126,7 +126,9 @@ function App(){
     if('serviceWorker' in navigator) navigator.serviceWorker.register('/sw.js').catch(()=>{});
     (async()=>{
       try{
-        const SQL = await initSqlJs({ locateFile: f => `/${f}` });
+        const SQL = await initSqlJs({
+          locateFile: () => '/sql-wasm.wasm',
+        });
         const txt = await fetch('/data/tecnova.sql', {cache:'no-store'}).then(r=>r.text());
         const database = new SQL.Database();
         database.run(txt);

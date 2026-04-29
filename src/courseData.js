@@ -4,13 +4,78 @@
 ═══════════════════════════════════════════════════════ */
 
 export const COURSE = [
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   MÓDULO 01 — INTRODUÇÃO A DADOS E BANCOS DE DADOS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+{
+  id: 'mod-00', level: 'Fundação', icon: '🧭',
+  title: '01. Introdução: dados, tabelas e bancos de dados',
+  objective: 'Entender o que são dados, informação, tabelas, tipos de dados, chaves e como um banco relacional organiza o trabalho do SQL.',
+
+  slides: [
+    {
+      kind: 'theory', title: 'Antes do SQL: o que é dado?',
+      points: [
+        '<strong>Dado</strong> é um registro bruto: um número, texto, data, status ou valor isolado. Exemplo: <code>1250.50</code>, <code>ATIVO</code>, <code>2026-04-28</code>.',
+        '<strong>Informação</strong> nasce quando o dado ganha contexto. Exemplo: <code>1250.50</code> sozinho é só número; como <code>valor_total</code> de um pedido, vira informação de venda.',
+        'SQL serve para transformar dados armazenados em respostas confiáveis: filtrar, cruzar, somar, auditar, comparar períodos e montar indicadores.'
+      ],
+      tip: '💡 Regra prática: dado sem contexto não decide nada; dado com contexto vira informação para decisão.'
+    },
+    {
+      kind: 'theory', title: 'Como um banco relacional organiza dados',
+      points: [
+        'Um banco relacional organiza dados em <strong>tabelas</strong>. Cada tabela representa um assunto: funcionários, produtos, clientes, pedidos, itens de pedido e projetos.',
+        'Cada <strong>linha</strong> é um registro. Cada <strong>coluna</strong> é um atributo daquele registro. Exemplo: na tabela <code>produtos</code>, cada linha é um produto e as colunas descrevem nome, categoria, preço e status.',
+        'O SQL lê essas tabelas e devolve outra tabela como resultado. Por isso quase todo resultado SQL aparece em grade: colunas + linhas.'
+      ],
+      tip: '💡 Tabela é a unidade central de trabalho. Antes de escrever SQL, descubra quais tabelas existem e quais colunas elas têm.'
+    },
+    {
+      kind: 'theory', title: 'Tipos de dados mais comuns',
+      points: [
+        '<strong>Texto</strong>: nomes, descrições, categorias e status. Em SQL aparecem como <code>TEXT</code>, <code>VARCHAR</code> ou equivalentes.',
+        '<strong>Números inteiros</strong>: IDs, quantidades e contadores. Exemplo: <code>quantidade = 3</code>.',
+        '<strong>Números decimais</strong>: preços, custos, salários e percentuais. Exemplo: <code>preco = 129.90</code>.',
+        '<strong>Datas e horários</strong>: criação de pedido, vencimento, admissão, encerramento. São essenciais para filtros por período.',
+        '<strong>Booleanos</strong>: verdadeiro/falso. Exemplo: <code>ativo = true</code>.'
+      ],
+      warn: '⚠️ Tipo errado gera análise errada. Preço salvo como texto, por exemplo, pode ordenar como texto e não como número.'
+    },
+    {
+      kind: 'theory', title: 'Chave primária e relacionamento',
+      points: [
+        '<strong>Chave primária</strong> identifica uma linha de forma única. Normalmente é uma coluna <code>id</code>. Dois registros não devem ter o mesmo ID.',
+        '<strong>Chave estrangeira</strong> liga uma tabela a outra. Exemplo: um pedido pode ter <code>cliente_id</code>, apontando para <code>clientes.id</code>.',
+        'Relacionamento é o motivo de JOIN existir: você junta tabelas diferentes para montar uma visão completa do negócio.'
+      ],
+      tip: '💡 Pense assim: ID é a placa do registro. Chave estrangeira é uma referência para encontrar outro registro relacionado.'
+    },
+    {
+      kind: 'example', title: 'Exemplo — Ver tipos de dados em funcionários',
+      sql: `SELECT id, nome, cargo, salario, ativo
+FROM funcionarios
+LIMIT 5;`,
+      explanation: 'Esse exemplo mostra número inteiro em <code>id</code>, texto em <code>nome</code>/<code>cargo</code>, decimal em <code>salario</code> e booleano em <code>ativo</code>.'
+    },
+    {
+      kind: 'example', title: 'Exemplo — Contexto transforma dado em informação',
+      sql: `SELECT id, nome, categoria, preco, ativo
+FROM produtos
+LIMIT 5;`,
+      explanation: 'O valor da coluna <code>preco</code> só faz sentido porque está ligado ao produto, categoria e status. Isso é contexto.'
+    }
+  ],
+
+  exercises: []
+},
 
 /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-   MÓDULO 01 — SELECT, FROM e LIMIT
+   MÓDULO 02 — SELECT, FROM e LIMIT
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 {
   id: 'mod-01', level: 'Iniciante', icon: '🔍',
-  title: '01. SELECT, FROM e LIMIT',
+  title: '02. SELECT, FROM e LIMIT',
   objective: 'Escrever sua primeira consulta SQL, escolher colunas e tabelas e controlar a quantidade de linhas retornadas.',
 
   slides: [
@@ -134,7 +199,7 @@ LIMIT 4;`,
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 {
   id: 'mod-02', level: 'Iniciante', icon: '🎯',
-  title: '02. WHERE e operadores de filtro',
+  title: '03. WHERE e operadores de filtro',
   objective: 'Filtrar linhas com condições numéricas, textuais e booleanas usando WHERE e os operadores de comparação.',
 
   slides: [
@@ -253,7 +318,7 @@ WHERE salario > 10000
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 {
   id: 'mod-03', level: 'Iniciante', icon: '↕️',
-  title: '03. ORDER BY, aliases e DISTINCT',
+  title: '04. ORDER BY, aliases e DISTINCT',
   objective: 'Ordenar resultados, renomear colunas com AS e eliminar duplicatas com DISTINCT.',
 
   slides: [
@@ -348,7 +413,7 @@ ORDER BY limite_credito DESC;`,
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 {
   id: 'mod-04', level: 'Iniciante', icon: '🔎',
-  title: '04. LIKE, IN, BETWEEN e NULL',
+  title: '05. LIKE, IN, BETWEEN e NULL',
   objective: 'Usar filtros avançados: busca por padrão de texto, listas de valores, intervalos e valores ausentes.',
 
   slides: [
@@ -455,7 +520,7 @@ ORDER BY nome;`,
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 {
   id: 'mod-05', level: 'Intermediário', icon: '🔗',
-  title: '05. INNER JOIN — unindo tabelas',
+  title: '06. INNER JOIN — unindo tabelas',
   objective: 'Entender chaves primárias e estrangeiras e usar INNER JOIN para combinar dados de múltiplas tabelas.',
 
   slides: [
@@ -564,7 +629,7 @@ ORDER BY p.total DESC;`,
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 {
   id: 'mod-06', level: 'Intermediário', icon: '📊',
-  title: '06. COUNT, SUM, AVG, MIN e MAX',
+  title: '07. COUNT, SUM, AVG, MIN e MAX',
   objective: 'Resumir conjuntos de dados com funções de agregação para criar indicadores e métricas.',
 
   slides: [
@@ -676,7 +741,7 @@ WHERE status = 'entregue';`,
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 {
   id: 'mod-07', level: 'Intermediário', icon: '📦',
-  title: '07. GROUP BY — agrupando para análise',
+  title: '08. GROUP BY — agrupando para análise',
   objective: 'Usar GROUP BY para calcular métricas separadas por categoria, departamento, status ou qualquer outra dimensão.',
 
   slides: [
@@ -771,7 +836,7 @@ ORDER BY funcionarios DESC;`,
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 {
   id: 'mod-08', level: 'Intermediário', icon: '🧹',
-  title: '08. HAVING — filtrando após a agregação',
+  title: '09. HAVING — filtrando após a agregação',
   objective: 'Usar HAVING para filtrar grupos inteiros com base no resultado de funções de agregação.',
 
   slides: [
@@ -873,7 +938,7 @@ ORDER BY faturamento DESC;`,
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 {
   id: 'mod-09', level: 'Intermediário', icon: '🔓',
-  title: '09. LEFT JOIN — incluindo registros sem correspondência',
+  title: '10. LEFT JOIN — incluindo registros sem correspondência',
   objective: 'Usar LEFT JOIN para manter todas as linhas do lado esquerdo, mesmo quando não há correspondência no lado direito.',
 
   slides: [
@@ -967,7 +1032,7 @@ ORDER BY f.nome;`,
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 {
   id: 'mod-10', level: 'Avançado', icon: '📈',
-  title: '10. Consultas analíticas e KPIs de negócio',
+  title: '11. Consultas analíticas e KPIs de negócio',
   objective: 'Construir consultas complexas que combinam múltiplos JOINs, GROUP BY e filtros para gerar indicadores reais de negócio.',
 
   slides: [
@@ -1047,7 +1112,7 @@ ORDER BY receita DESC;`,
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 {
   id: 'mod-11', level: 'Avançado', icon: '🔬',
-  title: '11. Qualidade de dados e auditoria SQL',
+  title: '12. Qualidade de dados e auditoria SQL',
   objective: 'Usar SQL para detectar dados ausentes, duplicados, inconsistentes ou fora das regras de negócio.',
 
   slides: [
@@ -1136,12 +1201,61 @@ GROUP BY pr.nome, pr.ativo;`,
   ]
 },
 
+
 /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-   MÓDULO 12 — Projeto Final
+   MÓDULO 12 — Funções úteis, ANY/ALL e arrays
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 {
-  id: 'mod-12', level: 'Avançado', icon: '🏆',
-  title: '12. Projeto Final — Relatório Executivo TechNova',
+  id: 'mod-12', level: 'Avançado', icon: '🧰',
+  title: '13. Funções úteis, ANY/ALL e arrays',
+  objective: 'Aprender funções usadas no dia a dia e entender ANY, ALL e arrays sem travar a prática offline no SQLite.',
+  slides: [
+    { kind:'theory', title:'ANY, ALL, arrays e funções úteis', points:[
+      'Funções, ANY, ALL e arrays entram no fim porque dependem de SELECT, WHERE, JOIN, GROUP BY, HAVING e subqueries.',
+      '<strong>ANY</strong> compara com pelo menos um valor. <strong>ALL</strong> compara com todos os valores.',
+      'No PostgreSQL existe <code>valor = ANY(array)</code> e <code>valor > ALL(subquery)</code>. No SQLite offline usamos equivalentes executáveis: <code>IN</code>, <code>EXISTS</code>, <code>MAX</code>, <code>GROUP_CONCAT</code>, <code>CASE</code>, <code>COALESCE</code>, <code>ROUND</code>.'
+    ], warn:'Os exemplos são compatíveis com SQLite/sql.js para rodar no iPhone offline.' },
+    { kind:'example', title:'Funções de texto', sql:`SELECT nome, UPPER(nome) AS nome_maiusculo, LOWER(cargo) AS cargo_minusculo, SUBSTR(nome, 1, 5) AS inicio_nome, LENGTH(nome) AS tamanho_nome
+FROM funcionarios
+ORDER BY nome;`, explanation:'Padroniza nomes, extrai trechos e mede tamanho de textos.' },
+    { kind:'example', title:'ROUND e margem', sql:`SELECT nome, preco, custo, ROUND(preco - custo, 2) AS margem_valor, ROUND(((preco - custo) / preco) * 100, 1) AS margem_percentual
+FROM produtos
+WHERE ativo = 1
+ORDER BY margem_percentual DESC;`, explanation:'Muito usado em BI, custo, compras e manutenção.' },
+    { kind:'example', title:'CASE e COALESCE', sql:`SELECT nome, salario, COALESCE(cidade, 'SEM CIDADE') AS cidade_tratada,
+CASE WHEN salario >= 15000 THEN 'ALTO' WHEN salario >= 9000 THEN 'MÉDIO' ELSE 'BASE' END AS faixa_salarial
+FROM funcionarios
+ORDER BY salario DESC;`, explanation:'CASE classifica registros. COALESCE trata valores nulos.' },
+    { kind:'example', title:'ANY na prática — IN', sql:`SELECT nome, cargo, salario
+FROM funcionarios
+WHERE departamento_id IN (SELECT id FROM departamentos WHERE area IN ('Receita', 'Produto'))
+ORDER BY nome;`, explanation:'IN cobre a ideia de “qualquer um destes valores”.' },
+    { kind:'example', title:'ALL na prática — MAX', sql:`SELECT nome, salario
+FROM funcionarios
+WHERE salario > (SELECT MAX(salario) FROM funcionarios WHERE departamento_id = 5)
+ORDER BY salario DESC;`, explanation:'Representa “maior que todos os salários do Suporte”.' },
+    { kind:'example', title:'Array/lista — GROUP_CONCAT', sql:`SELECT c.razao_social AS cliente, GROUP_CONCAT(DISTINCT pr.nome) AS produtos_comprados
+FROM pedidos p
+JOIN clientes c ON c.id = p.cliente_id
+JOIN itens_pedido ip ON ip.pedido_id = p.id
+JOIN produtos pr ON pr.id = ip.produto_id
+WHERE p.status = 'entregue'
+GROUP BY c.razao_social
+ORDER BY c.razao_social;`, explanation:'SQLite não tem array nativo como PostgreSQL, mas GROUP_CONCAT cria uma lista textual útil.' }
+  ],
+  exercises: [
+    { id:'e1', title:'Exercício 1 — Faixa de preço com CASE', statement:'Liste <strong>nome</strong>, <strong>preco</strong> e <code>faixa_preco</code> classificando produtos.', hint:'Use CASE WHEN preco >= 20000 THEN ... END AS faixa_preco FROM produtos', check: sql=>{const n=sql.toLowerCase(); const miss=['case','when','then','else','end','faixa_preco','from','produtos'].filter(t=>!n.includes(t)); if(miss.length)return{ok:false,msg:'Faltam: '+miss.join(', ')}; return{ok:true};}},
+    { id:'e2', title:'Exercício 2 — Receita ou Produto', statement:'Liste funcionários de departamentos cuja <code>area</code> seja Receita ou Produto. Use <code>IN</code> com subquery.', hint:"WHERE departamento_id IN (SELECT id FROM departamentos WHERE area IN ('Receita','Produto'))", check: sql=>{const n=sql.toLowerCase(); const miss=['from','funcionarios','in','select','departamentos','area'].filter(t=>!n.includes(t)); if(miss.length)return{ok:false,msg:'Faltam: '+miss.join(', ')}; return{ok:true};}},
+    { id:'e3', title:'Exercício 3 — Produtos por cliente', statement:'Monte uma lista por cliente com <strong>razao_social</strong> e coluna <code>produtos</code> usando <code>GROUP_CONCAT</code>.', hint:'GROUP_CONCAT(pr.nome) AS produtos; pedidos -> clientes -> itens_pedido -> produtos', check: sql=>{const n=sql.toLowerCase(); const miss=['group_concat','clientes','pedidos','itens_pedido','produtos','join','group by'].filter(t=>!n.includes(t)); if(miss.length)return{ok:false,msg:'Faltam: '+miss.join(', ')}; return{ok:true};}}
+  ]
+},
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   MÓDULO 13 — Projeto Final
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+{
+  id: 'mod-13', level: 'Avançado', icon: '🏆',
+  title: '14. Projeto Final — Relatório Executivo TechNova',
   objective: 'Consolidar todos os conceitos do curso em consultas analíticas completas que respondem a perguntas reais de negócio da TechNova.',
 
   slides: [
@@ -1233,159 +1347,17 @@ ORDER BY faturamento DESC;`,
         return {ok:true};
       }
     },
-  ]
-},
-
-/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-   MÓDULO 13 — ANY, ALL, ARRAY e padrões úteis do dia a dia
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
-{
-  id: 'mod-13', level: 'Intermediário', icon: '🧰',
-  title: '13. ANY, ALL, ARRAY e padrões úteis',
-  objective: 'Entender operadores avançados muito usados no dia a dia, principalmente em PostgreSQL, e aprender equivalentes seguros para praticar no banco offline do curso.',
-
-  slides: [
     {
-      kind: 'theory', title: 'Por que este módulo é útil no trabalho?',
-      points: [
-        '<code>ANY</code>, <code>ALL</code> e <code>ARRAY</code> aparecem bastante em PostgreSQL, APIs, filtros dinâmicos, relatórios com listas de parâmetros e consultas analíticas.',
-        'No dia a dia, eles resolvem perguntas como: "o salário é maior que pelo menos um valor de referência?", "o preço é maior que todos os produtos de uma categoria?", "este id está dentro de uma lista recebida do sistema?".',
-        'Importante: o banco offline deste curso roda em SQLite via navegador. SQLite não implementa <code>ANY</code>, <code>ALL</code> e arrays nativos como PostgreSQL. Por isso, a teoria mostra PostgreSQL e os exercícios usam equivalentes compatíveis para treinar o raciocínio.'
-      ],
-      tip: '💡 Regra prática: quando estiver em PostgreSQL, use <code>ANY/ALL/ARRAY</code> quando a lista vier de parâmetro, subquery ou coluna array. Em SQLite, pense em <code>IN</code>, <code>EXISTS</code>, <code>MIN</code>, <code>MAX</code> e subqueries.'
-    },
-    {
-      kind: 'theory', title: 'ANY — verdadeiro se bater com pelo menos um item',
-      points: [
-        '<code>ANY</code> compara um valor contra uma lista ou subquery. A condição é verdadeira se pelo menos uma comparação for verdadeira.',
-        'Exemplo mental: <code>salario &gt; ANY(lista)</code> significa: o salário é maior que pelo menos um valor da lista.',
-        'Com igualdade, <code>= ANY(array)</code> é muito parecido com <code>IN (...)</code>. Em PostgreSQL, é comum usar <code>id = ANY(:lista_ids)</code> quando a aplicação envia um array de ids.'
-      ],
-      tip: '💡 Tradução rápida: <code>= ANY</code> ≈ <code>IN</code>. <code>&gt; ANY</code> ≈ maior que o menor valor da lista. <code>&lt; ANY</code> ≈ menor que o maior valor da lista.'
-    },
-    {
-      kind: 'example', title: 'PostgreSQL — filtro com ANY e array',
-      sql: `SELECT id, nome, cargo
-FROM funcionarios
-WHERE departamento_id = ANY(ARRAY[1, 3, 5]);`,
-      explanation: 'Em PostgreSQL, esta consulta retorna funcionários cujo departamento está em qualquer um dos ids informados no array. No SQLite do curso, use <code>IN (1, 3, 5)</code>.'
-    },
-    {
-      kind: 'example', title: 'Equivalente offline — usando IN',
-      sql: `SELECT id, nome, cargo, departamento_id
-FROM funcionarios
-WHERE departamento_id IN (1, 3, 5)
-ORDER BY departamento_id, nome;`,
-      explanation: 'Este exemplo roda no banco offline. Ele treina o mesmo raciocínio de pertencimento a uma lista.'
-    },
-    {
-      kind: 'theory', title: 'ALL — verdadeiro se passar em todos os itens',
-      points: [
-        '<code>ALL</code> é mais restritivo que ANY. A comparação precisa ser verdadeira contra todos os valores retornados pela lista ou subquery.',
-        '<code>preco &gt; ALL(lista)</code> significa: o preço é maior que todos os valores da lista. Na prática, equivale a ser maior que o maior valor da lista.',
-        '<code>preco &lt; ALL(lista)</code> significa: o preço é menor que todos os valores da lista. Na prática, equivale a ser menor que o menor valor da lista.'
-      ],
-      warn: '⚠️ Cuidado com listas vazias e valores NULL. Em SQL real, NULL pode tornar a lógica menos óbvia. Quando houver risco de NULL, trate com <code>WHERE valor IS NOT NULL</code> na subquery.'
-    },
-    {
-      kind: 'example', title: 'PostgreSQL — maior que todos com ALL',
-      sql: `SELECT nome, preco
-FROM produtos
-WHERE preco > ALL (
-  SELECT preco
-  FROM produtos
-  WHERE categoria = 'Acessórios'
-);`,
-      explanation: 'Retorna produtos com preço maior que todos os produtos da categoria Acessórios. No banco offline, podemos reproduzir com <code>MAX(preco)</code>.'
-    },
-    {
-      kind: 'example', title: 'Equivalente offline — usando MAX',
-      sql: `SELECT nome, categoria, preco
-FROM produtos
-WHERE preco > (
-  SELECT MAX(preco)
-  FROM produtos
-  WHERE categoria = 'Acessórios'
-)
-ORDER BY preco DESC;`,
-      explanation: 'Consulta compatível com SQLite. Ela aplica o mesmo raciocínio de <code>&gt; ALL</code>: maior que o maior preço da categoria de referência.'
-    },
-    {
-      kind: 'theory', title: 'ARRAY — lista dentro da consulta ou da aplicação',
-      points: [
-        'Em PostgreSQL, <code>ARRAY</code> representa uma lista tipada: números, textos, datas etc. Exemplo: <code>ARRAY[10, 20, 30]</code>.',
-        'Arrays são muito úteis quando sua aplicação precisa mandar uma lista de filtros para a query: vários ids de ativos, vários status, vários centros de custo ou várias categorias.',
-        'Também existem funções como <code>unnest()</code>, que transforma um array em linhas, e operadores como <code>@&gt;</code>, usados para verificar se um array contém outro.'
-      ],
-      tip: '💡 No mundo real: array é excelente para parâmetro de tela. Exemplo: usuário seleciona 20 ativos; a aplicação envia um array; o SQL filtra com <code>ativo_id = ANY(:ativos)</code>.'
-    },
-    {
-      kind: 'example', title: 'PostgreSQL — array virando linhas com unnest',
-      sql: `SELECT unnest(ARRAY['aberta', 'em_execucao', 'encerrada']) AS status_os;`,
-      explanation: 'O <code>unnest</code> explode o array em linhas. Isso ajuda a montar listas auxiliares, cruzar parâmetros e validar filtros.'
-    },
-    {
-      kind: 'theory', title: 'Padrões úteis para consultas do dia a dia',
-      points: [
-        '<strong>Lista fixa:</strong> use <code>IN (...)</code> quando os valores são poucos e conhecidos na query.',
-        '<strong>Lista dinâmica vinda do sistema:</strong> em PostgreSQL, prefira <code>= ANY(:array)</code> para evitar montar SQL por concatenação.',
-        '<strong>Comparar contra grupo:</strong> use <code>MAX</code>/<code>MIN</code> quando quiser reproduzir a lógica de <code>&gt; ALL</code>, <code>&lt; ALL</code>, <code>&gt; ANY</code> ou <code>&lt; ANY</code>.',
-        '<strong>Existência:</strong> use <code>EXISTS</code> quando a pergunta for "existe pelo menos uma linha relacionada?". Muitas vezes é mais claro e performático que trazer todos os dados.'
-      ],
-      warn: '⚠️ Não monte listas concatenando texto vindo do usuário. Em sistemas reais, use parâmetros preparados. Isso evita erro de aspas e reduz risco de SQL injection.'
-    },
-    {
-      kind: 'example', title: 'Equivalente offline — EXISTS para existência',
-      sql: `SELECT c.id, c.razao_social
-FROM clientes c
-WHERE EXISTS (
-  SELECT 1
-  FROM pedidos p
-  WHERE p.cliente_id = c.id
-    AND p.status = 'entregue'
-)
-ORDER BY c.razao_social;`,
-      explanation: 'Retorna clientes que possuem pelo menos um pedido entregue. É um padrão muito usado para validar relacionamento sem precisar contar tudo.'
-    }
-  ],
-
-  exercises: [
-    {
-      id: 'e1', title: 'Exercício 1 — Equivalente de = ANY com IN',
-      statement: 'Liste <strong>id</strong>, <strong>nome</strong>, <strong>cargo</strong> e <strong>departamento_id</strong> da tabela <code>funcionarios</code> onde <code>departamento_id</code> esteja na lista <strong>1, 3, 5</strong>. Ordene por <code>departamento_id</code> e <code>nome</code>.',
-      hint: 'Use WHERE departamento_id IN (1, 3, 5) ORDER BY departamento_id, nome.',
+      id: 'e4', title: 'Exercício Final 4 — Relatório final com funções úteis',
+      statement: 'Crie um relatório por cliente com <code>razao_social</code>, lista de produtos com <code>GROUP_CONCAT</code>, <code>faturamento</code> com <code>SUM</code> e <code>ticket_medio</code> com <code>ROUND(AVG(...), 2)</code>. Considere apenas pedidos entregues.',
+      hint: "Use pedidos, clientes, itens_pedido e produtos; filtre p.status = 'entregue'; agrupe por c.razao_social.",
       check: sql => {
         const n = sql.toLowerCase();
-        const missing = ['select','nome','cargo','departamento_id','from','funcionarios','where','in','order','by'].filter(t=>!n.includes(t));
+        const missing = ['group_concat','round','avg','sum','clientes','pedidos','itens_pedido','produtos','entregue','group by'].filter(t=>!n.includes(t));
         if (missing.length) return {ok:false,msg:'Faltam: '+missing.join(', ')};
-        if (!/\bin\s*\([^)]*1[^)]*3[^)]*5[^)]*\)/i.test(sql)) return {ok:false,msg:'A lista do IN deve conter 1, 3 e 5.'};
         return {ok:true};
       }
     },
-    {
-      id: 'e2', title: 'Exercício 2 — Equivalente de > ALL com MAX',
-      statement: 'Liste <strong>nome</strong>, <strong>categoria</strong> e <strong>preco</strong> dos produtos cujo preço seja maior que o maior preço da categoria <code>Acessórios</code>. Ordene por preço decrescente.',
-      hint: "Use WHERE preco > (SELECT MAX(preco) FROM produtos WHERE categoria = 'Acessórios') ORDER BY preco DESC.",
-      check: sql => {
-        const n = sql.toLowerCase();
-        const missing = ['select','nome','categoria','preco','from','produtos','where','max','order','by'].filter(t=>!n.includes(t));
-        if (missing.length) return {ok:false,msg:'Faltam: '+missing.join(', ')};
-        if (!/categoria\s*=\s*'Acessórios'/i.test(sql) && !/categoria\s*=\s*'acessórios'/i.test(sql)) return {ok:false,msg:"Filtre a subquery por categoria = 'Acessórios'."};
-        return {ok:true};
-      }
-    },
-    {
-      id: 'e3', title: 'Exercício 3 — EXISTS para relacionamento',
-      statement: 'Liste <strong>id</strong> e <strong>razao_social</strong> dos clientes que têm pelo menos um pedido com status <code>entregue</code>. Use <code>EXISTS</code>.',
-      hint: "Use WHERE EXISTS (SELECT 1 FROM pedidos p WHERE p.cliente_id = c.id AND p.status = 'entregue').",
-      check: sql => {
-        const n = sql.toLowerCase();
-        const missing = ['select','razao_social','from','clientes','where','exists','pedidos','cliente_id','status'].filter(t=>!n.includes(t));
-        if (missing.length) return {ok:false,msg:'Faltam: '+missing.join(', ')};
-        if (!/'entregue'/i.test(sql)) return {ok:false,msg:"Filtre pedidos com status = 'entregue'."};
-        return {ok:true};
-      }
-    }
   ]
 },
 

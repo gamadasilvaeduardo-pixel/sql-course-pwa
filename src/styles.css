@@ -67,3 +67,51 @@
   .sidebar{width:min(88vw,360px)}
   .side-open .mobile-sidebar-toggle{left:min(88vw,360px)}
 }
+
+/* Ajuste solicitado: usuário dentro da sidebar */
+.side-user{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  background:#020617;
+  border:1px solid #334155;
+  border-radius:16px;
+  padding:10px;
+}
+.side-user small{display:block;color:#94a3b8;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.04em}
+.side-user strong{display:block;color:#e5e7eb;max-width:170px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.side-user button{padding:8px 10px;border-radius:12px;white-space:nowrap}
+.topbar{padding-right:0}
+
+/* Swipe horizontal dos slides no celular */
+@media (max-width:900px){
+  .slides{
+    display:flex;
+    gap:12px;
+    overflow-x:auto;
+    overflow-y:hidden;
+    scroll-snap-type:x mandatory;
+    scroll-padding:12px;
+    -webkit-overflow-scrolling:touch;
+    padding:0 2px 14px;
+  }
+  .slides::-webkit-scrollbar{height:8px}
+  .slides::-webkit-scrollbar-track{background:#020617;border-radius:999px}
+  .slides::-webkit-scrollbar-thumb{background:#334155;border-radius:999px}
+  .slides .slide-card{
+    min-width:calc(100vw - 32px);
+    max-width:calc(100vw - 32px);
+    scroll-snap-align:start;
+    scroll-snap-stop:always;
+  }
+  .side-user{margin-top:2px}
+}
+@media (max-width:520px){
+  .slides{scroll-padding:12px;gap:10px}
+  .slides .slide-card{
+    min-width:calc(100vw - 24px);
+    max-width:calc(100vw - 24px);
+  }
+  .side-user strong{max-width:135px}
+}

@@ -1236,4 +1236,157 @@ ORDER BY faturamento DESC;`,
   ]
 },
 
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   MÓDULO 13 — ANY, ALL, ARRAY e padrões úteis do dia a dia
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+{
+  id: 'mod-13', level: 'Intermediário', icon: '🧰',
+  title: '13. ANY, ALL, ARRAY e padrões úteis',
+  objective: 'Entender operadores avançados muito usados no dia a dia, principalmente em PostgreSQL, e aprender equivalentes seguros para praticar no banco offline do curso.',
+
+  slides: [
+    {
+      kind: 'theory', title: 'Por que este módulo é útil no trabalho?',
+      points: [
+        '<code>ANY</code>, <code>ALL</code> e <code>ARRAY</code> aparecem bastante em PostgreSQL, APIs, filtros dinâmicos, relatórios com listas de parâmetros e consultas analíticas.',
+        'No dia a dia, eles resolvem perguntas como: "o salário é maior que pelo menos um valor de referência?", "o preço é maior que todos os produtos de uma categoria?", "este id está dentro de uma lista recebida do sistema?".',
+        'Importante: o banco offline deste curso roda em SQLite via navegador. SQLite não implementa <code>ANY</code>, <code>ALL</code> e arrays nativos como PostgreSQL. Por isso, a teoria mostra PostgreSQL e os exercícios usam equivalentes compatíveis para treinar o raciocínio.'
+      ],
+      tip: '💡 Regra prática: quando estiver em PostgreSQL, use <code>ANY/ALL/ARRAY</code> quando a lista vier de parâmetro, subquery ou coluna array. Em SQLite, pense em <code>IN</code>, <code>EXISTS</code>, <code>MIN</code>, <code>MAX</code> e subqueries.'
+    },
+    {
+      kind: 'theory', title: 'ANY — verdadeiro se bater com pelo menos um item',
+      points: [
+        '<code>ANY</code> compara um valor contra uma lista ou subquery. A condição é verdadeira se pelo menos uma comparação for verdadeira.',
+        'Exemplo mental: <code>salario &gt; ANY(lista)</code> significa: o salário é maior que pelo menos um valor da lista.',
+        'Com igualdade, <code>= ANY(array)</code> é muito parecido com <code>IN (...)</code>. Em PostgreSQL, é comum usar <code>id = ANY(:lista_ids)</code> quando a aplicação envia um array de ids.'
+      ],
+      tip: '💡 Tradução rápida: <code>= ANY</code> ≈ <code>IN</code>. <code>&gt; ANY</code> ≈ maior que o menor valor da lista. <code>&lt; ANY</code> ≈ menor que o maior valor da lista.'
+    },
+    {
+      kind: 'example', title: 'PostgreSQL — filtro com ANY e array',
+      sql: `SELECT id, nome, cargo
+FROM funcionarios
+WHERE departamento_id = ANY(ARRAY[1, 3, 5]);`,
+      explanation: 'Em PostgreSQL, esta consulta retorna funcionários cujo departamento está em qualquer um dos ids informados no array. No SQLite do curso, use <code>IN (1, 3, 5)</code>.'
+    },
+    {
+      kind: 'example', title: 'Equivalente offline — usando IN',
+      sql: `SELECT id, nome, cargo, departamento_id
+FROM funcionarios
+WHERE departamento_id IN (1, 3, 5)
+ORDER BY departamento_id, nome;`,
+      explanation: 'Este exemplo roda no banco offline. Ele treina o mesmo raciocínio de pertencimento a uma lista.'
+    },
+    {
+      kind: 'theory', title: 'ALL — verdadeiro se passar em todos os itens',
+      points: [
+        '<code>ALL</code> é mais restritivo que ANY. A comparação precisa ser verdadeira contra todos os valores retornados pela lista ou subquery.',
+        '<code>preco &gt; ALL(lista)</code> significa: o preço é maior que todos os valores da lista. Na prática, equivale a ser maior que o maior valor da lista.',
+        '<code>preco &lt; ALL(lista)</code> significa: o preço é menor que todos os valores da lista. Na prática, equivale a ser menor que o menor valor da lista.'
+      ],
+      warn: '⚠️ Cuidado com listas vazias e valores NULL. Em SQL real, NULL pode tornar a lógica menos óbvia. Quando houver risco de NULL, trate com <code>WHERE valor IS NOT NULL</code> na subquery.'
+    },
+    {
+      kind: 'example', title: 'PostgreSQL — maior que todos com ALL',
+      sql: `SELECT nome, preco
+FROM produtos
+WHERE preco > ALL (
+  SELECT preco
+  FROM produtos
+  WHERE categoria = 'Acessórios'
+);`,
+      explanation: 'Retorna produtos com preço maior que todos os produtos da categoria Acessórios. No banco offline, podemos reproduzir com <code>MAX(preco)</code>.'
+    },
+    {
+      kind: 'example', title: 'Equivalente offline — usando MAX',
+      sql: `SELECT nome, categoria, preco
+FROM produtos
+WHERE preco > (
+  SELECT MAX(preco)
+  FROM produtos
+  WHERE categoria = 'Acessórios'
+)
+ORDER BY preco DESC;`,
+      explanation: 'Consulta compatível com SQLite. Ela aplica o mesmo raciocínio de <code>&gt; ALL</code>: maior que o maior preço da categoria de referência.'
+    },
+    {
+      kind: 'theory', title: 'ARRAY — lista dentro da consulta ou da aplicação',
+      points: [
+        'Em PostgreSQL, <code>ARRAY</code> representa uma lista tipada: números, textos, datas etc. Exemplo: <code>ARRAY[10, 20, 30]</code>.',
+        'Arrays são muito úteis quando sua aplicação precisa mandar uma lista de filtros para a query: vários ids de ativos, vários status, vários centros de custo ou várias categorias.',
+        'Também existem funções como <code>unnest()</code>, que transforma um array em linhas, e operadores como <code>@&gt;</code>, usados para verificar se um array contém outro.'
+      ],
+      tip: '💡 No mundo real: array é excelente para parâmetro de tela. Exemplo: usuário seleciona 20 ativos; a aplicação envia um array; o SQL filtra com <code>ativo_id = ANY(:ativos)</code>.'
+    },
+    {
+      kind: 'example', title: 'PostgreSQL — array virando linhas com unnest',
+      sql: `SELECT unnest(ARRAY['aberta', 'em_execucao', 'encerrada']) AS status_os;`,
+      explanation: 'O <code>unnest</code> explode o array em linhas. Isso ajuda a montar listas auxiliares, cruzar parâmetros e validar filtros.'
+    },
+    {
+      kind: 'theory', title: 'Padrões úteis para consultas do dia a dia',
+      points: [
+        '<strong>Lista fixa:</strong> use <code>IN (...)</code> quando os valores são poucos e conhecidos na query.',
+        '<strong>Lista dinâmica vinda do sistema:</strong> em PostgreSQL, prefira <code>= ANY(:array)</code> para evitar montar SQL por concatenação.',
+        '<strong>Comparar contra grupo:</strong> use <code>MAX</code>/<code>MIN</code> quando quiser reproduzir a lógica de <code>&gt; ALL</code>, <code>&lt; ALL</code>, <code>&gt; ANY</code> ou <code>&lt; ANY</code>.',
+        '<strong>Existência:</strong> use <code>EXISTS</code> quando a pergunta for "existe pelo menos uma linha relacionada?". Muitas vezes é mais claro e performático que trazer todos os dados.'
+      ],
+      warn: '⚠️ Não monte listas concatenando texto vindo do usuário. Em sistemas reais, use parâmetros preparados. Isso evita erro de aspas e reduz risco de SQL injection.'
+    },
+    {
+      kind: 'example', title: 'Equivalente offline — EXISTS para existência',
+      sql: `SELECT c.id, c.razao_social
+FROM clientes c
+WHERE EXISTS (
+  SELECT 1
+  FROM pedidos p
+  WHERE p.cliente_id = c.id
+    AND p.status = 'entregue'
+)
+ORDER BY c.razao_social;`,
+      explanation: 'Retorna clientes que possuem pelo menos um pedido entregue. É um padrão muito usado para validar relacionamento sem precisar contar tudo.'
+    }
+  ],
+
+  exercises: [
+    {
+      id: 'e1', title: 'Exercício 1 — Equivalente de = ANY com IN',
+      statement: 'Liste <strong>id</strong>, <strong>nome</strong>, <strong>cargo</strong> e <strong>departamento_id</strong> da tabela <code>funcionarios</code> onde <code>departamento_id</code> esteja na lista <strong>1, 3, 5</strong>. Ordene por <code>departamento_id</code> e <code>nome</code>.',
+      hint: 'Use WHERE departamento_id IN (1, 3, 5) ORDER BY departamento_id, nome.',
+      check: sql => {
+        const n = sql.toLowerCase();
+        const missing = ['select','nome','cargo','departamento_id','from','funcionarios','where','in','order','by'].filter(t=>!n.includes(t));
+        if (missing.length) return {ok:false,msg:'Faltam: '+missing.join(', ')};
+        if (!/\bin\s*\([^)]*1[^)]*3[^)]*5[^)]*\)/i.test(sql)) return {ok:false,msg:'A lista do IN deve conter 1, 3 e 5.'};
+        return {ok:true};
+      }
+    },
+    {
+      id: 'e2', title: 'Exercício 2 — Equivalente de > ALL com MAX',
+      statement: 'Liste <strong>nome</strong>, <strong>categoria</strong> e <strong>preco</strong> dos produtos cujo preço seja maior que o maior preço da categoria <code>Acessórios</code>. Ordene por preço decrescente.',
+      hint: "Use WHERE preco > (SELECT MAX(preco) FROM produtos WHERE categoria = 'Acessórios') ORDER BY preco DESC.",
+      check: sql => {
+        const n = sql.toLowerCase();
+        const missing = ['select','nome','categoria','preco','from','produtos','where','max','order','by'].filter(t=>!n.includes(t));
+        if (missing.length) return {ok:false,msg:'Faltam: '+missing.join(', ')};
+        if (!/categoria\s*=\s*'Acessórios'/i.test(sql) && !/categoria\s*=\s*'acessórios'/i.test(sql)) return {ok:false,msg:"Filtre a subquery por categoria = 'Acessórios'."};
+        return {ok:true};
+      }
+    },
+    {
+      id: 'e3', title: 'Exercício 3 — EXISTS para relacionamento',
+      statement: 'Liste <strong>id</strong> e <strong>razao_social</strong> dos clientes que têm pelo menos um pedido com status <code>entregue</code>. Use <code>EXISTS</code>.',
+      hint: "Use WHERE EXISTS (SELECT 1 FROM pedidos p WHERE p.cliente_id = c.id AND p.status = 'entregue').",
+      check: sql => {
+        const n = sql.toLowerCase();
+        const missing = ['select','razao_social','from','clientes','where','exists','pedidos','cliente_id','status'].filter(t=>!n.includes(t));
+        if (missing.length) return {ok:false,msg:'Faltam: '+missing.join(', ')};
+        if (!/'entregue'/i.test(sql)) return {ok:false,msg:"Filtre pedidos com status = 'entregue'."};
+        return {ok:true};
+      }
+    }
+  ]
+},
+
 ]; // fim COURSE

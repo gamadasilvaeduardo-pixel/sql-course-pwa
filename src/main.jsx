@@ -219,6 +219,13 @@ function App(){
     <button className="sidebar-backdrop" type="button" aria-label="Fechar módulos" onClick={()=>setSideOpen(false)} />
     <aside className="sidebar">
       <div className="side-brand"><div className="brand-badge small">SQL</div><div><strong>Curso SQL</strong><small>Offline / PWA</small></div></div>
+      <div className="side-user">
+        <div>
+          <small>Usuário</small>
+          <strong>{user.name}</strong>
+        </div>
+        <button className="ghost" onClick={()=>{localStorage.removeItem(LS_USER);location.reload()}}>Sair</button>
+      </div>
       <div className="progress"><span>{doneCount}/{totalExercises}</span><div><i style={{width:`${(doneCount/Math.max(totalExercises,1))*100}%`}} /></div></div>
       <nav>{COURSE.map((m,i)=>{
         const d=(m.exercises||[]).filter(e=>progress[makeId(m.id,e.id)]?.done).length;
@@ -230,7 +237,6 @@ function App(){
     <main className="content">
       <header className="topbar">
         <div><h1>{mod.title}</h1><p>{mod.objective}</p></div>
-        <div className="userbox"><span>{user.name}</span><button className="ghost" onClick={()=>{localStorage.removeItem(LS_USER);location.reload()}}>Sair</button></div>
       </header>
       <section className="status-row"><span>{dbStatus}</span><span>Módulo: {modDone}/{mod.exercises?.length||0}</span><button className="ghost" onClick={resetProgress}>Limpar progresso</button><button className="ghost" onClick={resetDb}>Recarregar BD</button></section>
       <div className="tabs"><button className={tab==='teoria'?'active':''} onClick={()=>setTab('teoria')}>Teoria e exemplos</button><button className={tab==='exercicios'?'active':''} onClick={()=>setTab('exercicios')}>Exercícios</button><button className={tab==='lab'?'active':''} onClick={()=>setTab('lab')}>Laboratório livre</button></div>
